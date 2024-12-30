@@ -1,0 +1,113 @@
+TASK 1
+Create a database for managing a library's book inventory, members, and
+borrow/return transactions. This project helps you learn basic SQL commands
+and database design. Design tables for books, members, and transactions.
+Write SQL queries to insert, update, delete, and retrieve data.
+
+
+1.CREATE TABLE
+
+/*create table books
+
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Publisher VARCHAR(255) NOT NULL,
+    PublicationYear INT NOT NULL,
+    ISBN VARCHAR(20) NOT NULL,
+    Status VARCHAR(10) NOT NULL CHECK(Status IN ('Available', 'Borrowed'))
+);
+
+
+/*create table members
+
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    Phone VARCHAR(20) NOT NULL,
+    Address VARCHAR(255) NOT NULL
+);
+
+
+/*create table transaction
+
+CREATE TABLE Transactions(
+    TransactionID INT PRIMARY KEY,
+    BookID INT NOT NULL,
+    MemberID INT NOT NULL,
+    BorrowDate DATE NOT NULL,
+    ReturnDate DATE,
+    Status VARCHAR(10) NOT NULL CHECK(Status IN ('Borrowed', 'Returned')),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+
+2.INSERT DATA
+
+INSERT INTO Books (BookID, Title, Author, Publisher, PublicationYear, ISBN, Status)
+VALUES
+(1, 'To Kill a Mockingbird', 'Harper Lee', 'J.B. Lippincott & Co.', 1960, '978-0446310786', 'Available'),
+(2, '1984', 'George Orwell', 'Secker & Warburg', 1949, '978-0451524935', 'Available'),
+(3, 'Pride and Prejudice', 'Jane Austen', 'T. Egerton', 1813, '978-0486284736', 'Available');
+
+
+INSERT INTO Members (MemberID, Name, Email, Phone, Address)
+VALUES
+(1, 'John Doe', 'johndoe@example.com', '123-456-7890', '123 Main St'),
+(2, 'Jane Doe', 'janedoe@example.com', '987-654-3210', '456 Elm St'),
+(3, 'Bob Smith', 'bobsmith@example.com', '555-123-4567', '789 Oak St');
+
+
+INSERT INTO Transactions (TransactionID, BookID, MemberID, BorrowDate, ReturnDate, Status)
+VALUES
+(1, 1, 1, '2022-01-01', NULL, 'Borrowed'),
+(2, 2, 2, '2022-01-15', '2022-02-01', 'Returned'),
+(3, 3, 3, '2022-02-01', NULL, 'Borrowed');
+
+
+3.UPDATE DATA
+
+
+UPDATE Books
+SET Status = 'Borrowed'
+WHERE BookID = 1;
+
+UPDATE Transactions
+SET ReturnDate = '2022-03-01', Status = 'Returned'
+WHERE TransactionID = 1;
+
+
+4.DELETE DATA
+
+DELETE FROM Transactions
+WHERE TransactionID = 2;
+
+DELETE FROM Books
+WHERE BookID = 3;
+
+
+5.RETRIEVE DATA
+
+SELECT * FROM Books;
+SELECT * FROM Members;
+SELECT * FROM Transactions;
+
+SELECT b.Title, m.Name, t.BorrowDate, t.ReturnDate
+FROM Books b
+JOIN Transactions t ON b.BookID = t.BookID
+JOIN Members m ON t.MemberID = m.MemberID;
+
+SELECT b.Title, COUNT(t.TransactionID) AS BorrowCount
+FROM Books b
+JOIN Transactions t ON b.BookID = t.BookID
+GROUP BY b.Title
+ORDER BY BorrowCount DESC;
+
+
+
+
+
+
